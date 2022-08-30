@@ -1,15 +1,27 @@
+terraform {
+  cloud {
+    organization = "wf-demo-org"
+
+    workspaces {
+      name = "wf-demo-workspace"
+    }
+  }
+  required_providers {
+    gcp = {
+      source  = "hashicorp/gcp"
+      version = "~> 3.0"
+    }
+  }
+}
+
+
+
+
 provider "google" {
-  credentials = file(var.credentials_path)
   project     = var.project
   region      = var.region
 }
 
-terraform {
-  backend "gcs" {
-    credentials = var.credentials_path
-    prefix      = "terragoat/${var.environment}"
-  }
-}
 
 variable "credentials_path" {
   type        = string
