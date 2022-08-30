@@ -1,7 +1,6 @@
 terraform {
   cloud {
     organization = "wf-demo-org"
-
     workspaces {
       name = "wf-demo-workspace"
     }
@@ -21,6 +20,7 @@ provider "google" {
   project     = "my-project-id"
   region      = "us-central1"
   zone        = "us-central1-c"
+  credentials = var.gcp-creds
 }
 
 
