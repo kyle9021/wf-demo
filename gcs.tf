@@ -23,6 +23,9 @@ provider "google" {
   credentials = var.gcp-creds
 }
 
+variable "gcp-creds" {
+default= ""
+}
 
 variable "region" {
   default = "us-central1"
