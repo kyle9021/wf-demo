@@ -18,20 +18,10 @@ terraform {
 
 
 provider "google" {
-  project     = var.project
-  region      = var.region
+  project     = "my-project-id"
+  region      = "us-central1"
 }
 
-
-variable "credentials_path" {
-  type        = string
-  description = "Path to credentials file"
-}
-
-variable "project" {
-  type        = string
-  description = "The GCP project to be deployed to"
-}
 
 variable "region" {
   default = "us-central1"
