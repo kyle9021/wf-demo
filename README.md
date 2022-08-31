@@ -183,7 +183,7 @@ main = rule { length(resp.violations) < 1 }
 
 NOTE: The status from each run will show up both in Terraform Cloud and in the Prisma Cloud Code Security Module! So both the Prisma Cloud Admin and the Admin of the terraform cloud environment can see the same information. DevSecOps. 
 
-If you get stuck take a look at [this repo](https://github.com/kyle9021/wbc-demo), as I can confirm everything is working as expected. Hope this is helpful. Good luck. 
+If you get stuck take a look at [this repo](https://github.com/kyle9021/wf-demo), as I can confirm everything is working as expected. Hope this is helpful. Good luck. 
 
 
 PS. 
