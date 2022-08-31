@@ -2,8 +2,7 @@
 Requirements
 
 * GitHub repository with a terraform file, something like [this](https://github.com/kyle9021/wbc-demo/blob/main/s3.tf)
-* An AWS Account with an IAM user that has permissions to deploy IaC files
-* AWS Access Key and Secret key created for your IAM user
+* A GCP Account with a service account key file in JSON format
 * A license for Prisma Cloud Enterprise with the Code Security Module. 
 * A blank text doc that looks like [this](https://github.com/kyle9021/wbc-demo/blob/main/example_text_doc.txt)
 * A TF cloud license that is either a trial or TF Cloud license at the TEAM & GOVERNANCE level or higher. see [link](https://www.hashicorp.com/products/terraform/pricing) 
@@ -19,10 +18,10 @@ Requirements
 * Select GitHub. You'll need to sign into your GitHub account and ensure the Oauth scope includes the repo where your IaC files are stored. 
 * Provide a name and then hit the 'Create Workspace' button
 * On the 'Overview tab' click the button 'configure variables'
-* Create workspace variables (you are welcome to create a variable set if you have multiple repos/projects). The two variables you'll need to add are `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`. 
-* Click the button '+ Add Variable' and select 'Environment Variable'
-* The Key for the first variable will be `AWS_ACCESS_KEY_ID` (It's particular on the formatting, naming, and capitialization) and the value will be the IAM users '<ACCESS_KEY_ID>'.
-* Make sure you check the box next to sensitive, then click save. Repeat the same process for `AWS_SECRET_ACCESS_KEY`
+* Create workspace variable (you are welcome to create a variable set if you have multiple repos/projects). The variable you'll need to add is `gcp-creds`
+* Click the button '+ Add Variable' and select 'Terraform Variable'
+* The value for the variable `gcp-creds` should be the contents of the GCP Key file.
+* Make sure you check the box next to sensitive, then click save.
 * After you create your variables and have them saved. Copy the workspace name you created earlier and save it in a text file as `WORKSPACE_NAME` we'll come back to this in a bit. 
 * Also underneath your workspace name there should be an ID and a copy icon (looks like two pages on top of one another). Hit the 'copy button' and save the ID in the same text file you saved your `WORKSPACE_NAME` in. We'll need this later too. Save the id as `WORKSPACE_ID`
 
@@ -82,9 +81,9 @@ import "json"
 param PRISMA_ACCESS_KEY
 param PRISMA_SECRET_KEY
 
-loginReq = http.request("https://api2.prismacloud.io/login").with_body(json.marshal({"username": PRISMA_ACCESS_KEY, "password": PRISMA_SECRET_KEY})).with_header("Content-Type", "application/json")
+loginReq = http.request("https://<API_STACK>.prismacloud.io/login").with_body(json.marshal({"username": PRISMA_ACCESS_KEY, "password": PRISMA_SECRET_KEY})).with_header("Content-Type", "application/json")
 loginResp = json.unmarshal(http.post(loginReq).body)
-req = http.request("https://api2.prismacloud.io/bridgecrew/api/v1/tfCloud/sentinel/ws-wjkHiazBi7asooiM").with_header("Authorization", loginResp.token)
+req = http.request("https://<API_STACK>.prismacloud.io/bridgecrew/api/v1/tfCloud/sentinel/<WORKSPACE_ID>").with_header("Authorization", loginResp.token)
 resp = json.unmarshal(http.get(req).body)
 if (length(resp.violations) > 0) {
     print("Violations:\n")
@@ -143,9 +142,9 @@ import "json"
 param PRISMA_ACCESS_KEY
 param PRISMA_SECRET_KEY
 
-loginReq = http.request("https://api2.prismacloud.io/login").with_body(json.marshal({"username": PRISMA_ACCESS_KEY, "password": PRISMA_SECRET_KEY})).with_header("Content-Type", "application/json")
+loginReq = http.request("https://<API_STACK>.prismacloud.io/login").with_body(json.marshal({"username": PRISMA_ACCESS_KEY, "password": PRISMA_SECRET_KEY})).with_header("Content-Type", "application/json")
 loginResp = json.unmarshal(http.post(loginReq).body)
-req = http.request("https://api2.prismacloud.io/bridgecrew/api/v1/tfCloud/sentinel/ws-wjkHiazBi7asooiM").with_header("Authorization", loginResp.token)
+req = http.request("https://<API_STACK>.prismacloud.io/bridgecrew/api/v1/tfCloud/sentinel/<WORKSPACE_ID>").with_header("Authorization", loginResp.token)
 resp = json.unmarshal(http.get(req).body)
 if (length(resp.violations) > 0) {
     print("Violations:\n")
